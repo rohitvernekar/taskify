@@ -31,4 +31,6 @@
 
 ## Notes
 
-All items pass. Specification is ready for `/speckit-clarify` or `/speckit-plan`.
+All items pass. Clarification session 2026-11-17 resolved 5 ambiguities (column movement
+direction, comment edit/delete permissions, task reassignment actors, input length limits,
+task card surface info). Specification is ready for `/speckit-plan`.

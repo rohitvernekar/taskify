@@ -135,6 +135,11 @@ team communication value independently.
   is surfaced to the user.)
 - What happens when two users attempt to rename the same task at the same time? (The
   last write wins; no conflict resolution is required in this phase.)
+- What happens when a user deletes a comment? (The comment is permanently removed with
+  no undo; a brief confirmation prompt MUST be shown before deletion to prevent accidental
+  loss.)
+- What happens when a user edits a comment to be empty or whitespace-only? (Validation
+  rejects the edit; the original comment body is preserved.)
 
 ## Requirements *(mandatory)*
 
@@ -153,21 +158,34 @@ team communication value independently.
   a title (required), a description (optional), and an assignee chosen from the five
   predefined team members.
 - **FR-006**: System MUST allow any user to move any task from its current column to any
-  other column without restriction.
+  other column without restriction, including backward movement (e.g., Done → In Progress).
+  No transition rules or mandatory reasons are required for any direction of movement.
 - **FR-007**: System MUST display a task detail view showing the task's title, description,
   assignee, creator, current column, creation timestamp, and all associated comments.
+- **FR-007a**: Each task card on the Kanban board MUST display, without requiring the
+  detail view to be opened: the task title, the assignee's name, and the creator's name.
 - **FR-008**: System MUST allow any user to add a text comment to a task; the comment
   MUST be attributed to the currently selected user identity and timestamped.
+- **FR-008a**: System MUST allow any user to edit the body text of any comment; the
+  original author attribution and timestamp MUST be preserved, and an "edited" indicator
+  MUST be displayed on the comment after modification.
+- **FR-008b**: System MUST allow any user to delete any comment; deleted comments MUST
+  be permanently removed with no recovery mechanism.
 - **FR-009**: System MUST display comments on a task in ascending chronological order
   (oldest first).
 - **FR-010**: System MUST pre-seed three sample projects with representative tasks
   distributed across columns on initial load, requiring no user setup.
-- **FR-011**: All user-provided inputs (project name, task title, task description,
-  comment body) MUST be validated for required fields, non-whitespace content where
-  required, and maximum length before being accepted; validation errors MUST be shown
-  inline adjacent to the offending field.
-- **FR-012**: System MUST allow any user to reassign an existing task to a different
-  team member from the predefined list.
+- **FR-011**: All user-provided inputs MUST be validated for required fields,
+  non-whitespace content where required, and the following maximum character lengths
+  before being accepted; validation errors MUST be shown inline adjacent to the
+  offending field:
+  - Project name: required, max 100 characters.
+  - Task title: required, max 100 characters.
+  - Task description: optional, max 2000 characters.
+  - Comment body: required (non-whitespace), max 2000 characters.
+- **FR-012**: System MUST allow any user to reassign any existing task to any other
+  team member from the predefined list, regardless of who created the task or who is
+  currently assigned. No role restriction applies in this phase.
 - **FR-013**: System MUST allow any user to edit an existing task's title and description.
 - **FR-014**: The currently selected user identity MUST be persistently visible (e.g.,
   in a header or sidebar) and switchable at any time without losing the current view.
@@ -176,13 +194,14 @@ team communication value independently.
 
 - **User**: A predefined team member with a name and role (product manager or engineer).
   There are exactly five users; they cannot be created or deleted by end users.
-- **Project**: A named container for a set of tasks. Attributes: name, optional
-  description, creator (User), creation timestamp.
-- **Task**: A unit of work belonging to a project. Attributes: title, optional
-  description, assignee (User), creator (User), Kanban column (one of the four fixed
-  values), creation timestamp.
-- **Comment**: A text note attached to a task. Attributes: body text, author (User),
-  timestamp.
+- **Project**: A named container for a set of tasks. Attributes: name (required,
+  max 100 chars), optional description, creator (User), creation timestamp.
+- **Task**: A unit of work belonging to a project. Attributes: title (required,
+  max 100 chars), description (optional, max 2000 chars), assignee (User), creator
+  (User), Kanban column (one of the four fixed values), creation timestamp.
+- **Comment**: A text note attached to a task. Attributes: body text (required,
+  max 2000 chars), author (User), created timestamp, edited flag (boolean). Any user
+  may edit or delete any comment; original author attribution is preserved after edits.
 
 ## Success Criteria *(mandatory)*
 
@@ -204,6 +223,16 @@ team communication value independently.
   within 1 second of a failed submission attempt.
 - **SC-008**: 100% of user inputs (task titles, descriptions, comments, project names)
   are validated before acceptance; no unvalidated data is stored or displayed.
+
+## Clarifications
+
+### Session 2026-11-17
+
+- Q: Should users be able to move a task to any column in any direction (e.g., from "Done" back to "In Progress"), or should column transitions be restricted to forward-only movement? → A: Any column to any column, any direction, no restrictions.
+- Q: Should users be able to edit or delete comments after they are posted, and if so, is that permission restricted to the comment's own author or open to any user? → A: Any user can edit and delete any comment.
+- Q: Should any user be able to reassign a task to a different team member, or should reassignment be restricted to specific actors such as the task creator or the product manager? → A: Any user can reassign any task.
+- Q: What are the maximum character limits for task title, task description, comment body, and project name? → A: Task title 100, task description 2000, comment body 2000, project name 100.
+- Q: What information should be visible on a task card directly on the Kanban board, without requiring the user to open the task detail view? → A: Title + assignee name + creator name.
 
 ## Assumptions
 

@@ -1,18 +1,3 @@
-<!--
-SYNC IMPACT REPORT
-==================
-Version Change: [unreleased / template] → 1.0.0
-Added Sections:
-  - Core Principles I–IV: Security-First, Input Validation, Microservices Architecture,
-    Full Documentation
-  - Architecture Standards
-  - Development Workflow
-  - Governance
-Modified Principles: N/A (initial ratification; prior file was an unfilled template)
-Removed Sections: N/A
-Follow-up TODOs: None — all placeholders resolved.
--->
-
 # Taskify Constitution
 
 ## Core Principles
@@ -87,6 +72,15 @@ The following cross-cutting standards apply to all services within the Taskify e
   PII and secrets MUST be redacted before emission to any log sink or monitoring system.
 - **Dependency management**: All third-party dependencies MUST be pinned with integrity hashes
   in a lockfile and scanned by a software-composition-analysis (SCA) tool on every build.
+- **HLD compliance**: Every implementation plan MUST conform to and explicitly reference
+  `docs/hld.md`. Plans that deviate from the documented architecture without an approved
+  Architecture Decision Record (ADR) MUST be rejected before implementation begins.
+- **Architecture Decision Records (ADR)**: Any change to the system architecture documented
+  in `docs/hld.md` MUST be preceded by an ADR that is created and approved before the
+  corresponding plan or implementation proceeds. ADRs MUST be stored in `docs/adr/` and
+  MUST follow this structure: **title**, **status** (Proposed / Accepted / Deprecated /
+  Superseded), **context** (the problem or constraint driving the decision), **decision**
+  (the chosen approach), **consequences** (trade-offs, risks, and follow-up actions).
 
 ## Development Workflow
 
@@ -117,6 +111,7 @@ project. All implementation decisions MUST be traceable to one or more principle
   review. Non-compliant code MUST NOT be merged; waivers require a documented, time-bounded
   risk-acceptance record signed off by a project lead.
 - **Conflict resolution**: When implementation requirements conflict with a principle stated
-  here, the principle takes precedence unless a formal waiver is in place.
+  here, the principle takes precedence unless a formal waiver (or an approved ADR for
+  architecture deviations) is in place.
 
-**Version**: 1.0.0 | **Ratified**: 2026-11-17 | **Last Amended**: 2026-11-17
+**Version**: 1.1.0 | **Ratified**: 2026-11-17 | **Last Amended**: 2026-11-19
