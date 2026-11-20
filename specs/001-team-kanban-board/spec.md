@@ -239,8 +239,9 @@ team communication value independently.
 - No user authentication or registration is required in this phase; users select their
   identity from the predefined list at session start. Identity switching is permitted at
   any time.
-- Data persistence is scoped to the browser session (e.g., in-memory or local storage);
-  no server-side database or backend API is required for this phase.
+- Data persistence is managed server-side via MySQL 8 accessed through a FastAPI REST API;
+  all content (projects, tasks, comments, and column moves) persists across page refreshes
+  and browser sessions on the same Docker Compose instance.
 - All five users share unrestricted access to all projects, tasks, and comments; no
   per-project or per-role permissions are enforced in this phase.
 - The product manager and engineers have identical feature capabilities; role distinctions
